@@ -17,7 +17,7 @@ namespace Revit.ScriptCS.ScriptRunner
         static readonly string ExecutingAssemblyPath = Assembly.GetExecutingAssembly().Location;
         private Window scriptEditor;
 
-        private Thread scriptEditorThread;
+        //private Thread scriptEditorThread;
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
@@ -56,65 +56,7 @@ namespace Revit.ScriptCS.ScriptRunner
             }
         }
 
-        public void ShowWPF()
-        {
-            try
-            {
-                if ( scriptEditorThread is null || !scriptEditorThread.IsAlive )
-                {
-                    var handler = new ScriptRunnerHandler();
-                    ExternalEvent externalEvent = ExternalEvent.Create(handler);
-                    var assembliesToRef = new List<Assembly>
-                    {
-                        typeof(object).Assembly, //mscorlib
-                        typeof(Autodesk.Revit.UI.UIApplication).Assembly,
-                        typeof(Autodesk.Revit.DB.Document).Assembly,
-                        Assembly.Load("RoslynPad.Roslyn.Windows"),
-                        Assembly.Load("RoslynPad.Editor.Windows")
-                    };
-
-                    var namespaces = new List<string>
-                    {
-                        "Autodesk.Revit.UI",
-                        "Autodesk.Revit.DB",
-                        "Autodesk.Revit.DB.Structure",
-                        "System",
-                        "System.Collections.Generic",
-                        "System.IO",
-                        "System.Linq"
-                    };
-
-                    var roslynHost = new RevitRoslynHost(
-                        additionalAssemblies: assembliesToRef,
-                        references: RoslynHostReferences.NamespaceDefault.With(typeNamespaceImports: new[] { typeof(UIApplication), typeof(Autodesk.Revit.DB.Document), typeof(Dictionary<,>), typeof(System.Linq.Enumerable), typeof(ScriptGlobals) }),
-                        disabledDiagnostics: ImmutableArray.Create("CS1701", "CS1702", "CS0518"));
-                                      
-                    var document = new RoslynEditorViewModel(roslynHost, externalEvent, handler);                    
-
-                    scriptEditorThread = new Thread(new ThreadStart(() =>
-                    {
-                        SynchronizationContext.SetSynchronizationContext(
-                            new DispatcherSynchronizationContext(
-                                Dispatcher.CurrentDispatcher));
-
-                        scriptEditor = new RoslynEditor(document);
-                        handler.Progress = new Progress<string>(message => document.Result += message + Environment.NewLine);
-                        scriptEditor.Closed += (s, e) => Dispatcher.CurrentDispatcher.InvokeShutdown();
-                        scriptEditor.Show();
-                        Dispatcher.Run();
-                    }));
-
-                    scriptEditorThread.SetApartmentState(ApartmentState.STA);
-                    scriptEditorThread.IsBackground = true;
-                    scriptEditorThread.Start();
-                }
-            }
-            catch ( Exception ex )
-            {
-                TaskDialog.Show("Error", ex.Message);
-                //throw;
-            }
-        }
+        
 
     }
 }
