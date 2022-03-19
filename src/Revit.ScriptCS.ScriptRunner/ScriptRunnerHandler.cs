@@ -1,16 +1,15 @@
-﻿using Autodesk.Revit.UI;
-using Autodesk.Revit.DB.Structure;
-
+﻿
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
 using System;
+using Autodesk.AutoCAD.ApplicationServices;
 
 namespace Revit.ScriptCS.ScriptRunner
 {
-    public class ScriptRunnerHandler : IExternalEventHandler
+    public class ScriptRunnerHandler
     {
         public string ScriptText { get; internal set; }
 
@@ -19,27 +18,24 @@ namespace Revit.ScriptCS.ScriptRunner
         public RoslynEditorViewModel RoslynEditorViewModel { get; set; }
         public IProgress<string> Progress { get; set; }
 
-        public void Execute(UIApplication app)
+        public void Execute(Document doc)
         {
             var assembliesToRef = new List<Assembly>
             {
                 typeof(object).Assembly, //mscorlib
-                typeof(Autodesk.Revit.UI.UIApplication).Assembly, // Microsoft.CodeAnalysis.Workspaces
-                typeof(Autodesk.Revit.DB.Document).Assembly, // Microsoft.Build
+                typeof(Autodesk.AutoCAD.ApplicationServices.Document).Assembly, // Microsoft.CodeAnalysis.Workspaces
             };
 
             var namespaces = new List<string>
             {
-                "Autodesk.Revit.UI",
-                "Autodesk.Revit.DB",
-                "Autodesk.Revit.DB.Structure",
+                "Autodesk.AutoCAD.ApplicationServices.Document",
                 "System",
                 "System.Collections.Generic",
                 "System.IO",
                 "System.Linq"
             };
 
-            ScriptGlobals globals = new ScriptGlobals(Progress) { doc = app.ActiveUIDocument.Document, uidoc = app.ActiveUIDocument };
+            ScriptGlobals globals = new ScriptGlobals(Progress) { doc = doc};
 
             var options = ScriptOptions.Default.AddReferences(assembliesToRef).WithImports(namespaces);
 
