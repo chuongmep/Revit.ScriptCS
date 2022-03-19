@@ -2,43 +2,50 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Autodesk.AutoCAD.Runtime;
+using Exception = System.Exception;
 
 namespace Revit.ScriptCS.ScriptRunner
 {
     public class ScriptRunnerApp : IExtensionApplication
     {
-        // static BitmapSource GetEmbeddedImage(string name)
-        // {
-        //     try
-        //     {
-        //         Assembly a = Assembly.GetExecutingAssembly();
-        //         using ( var s = a.GetManifestResourceStream(name) )
-        //         {
-        //             return BitmapFrame.Create(s);
-        //         }
-        //     }
-        //     catch
-        //     {
-        //         return null;
-        //     }
-        // }
-
 
         public void Initialize()
         {
-            FrmSharpShell command = new FrmSharpShell();
-            command.ShowDialog();
+            ResolveAssembly();
+            //ScriptRunnerExternalCommand command = new ScriptRunnerExternalCommand();
+            //command.ShowFormWPF();
         }
 
         public void Terminate()
         {
-            throw new NotImplementedException();
+            //Nothing
+        }
+
+        public void ResolveAssembly()
+        {
+            try
+            {
+                string filePath = Assembly.GetExecutingAssembly().Location;
+                var files = Directory.GetFiles(filePath);
+                foreach (string file in files)
+                {
+                    if (file.EndsWith(".dll"))
+                    {
+                        Assembly.LoadFrom(file);
+                    }
+                }
+            }
+            catch (Exception  e)
+            {
+                MessageBox.Show(e.ToString());
+            }
         }
     }
 }

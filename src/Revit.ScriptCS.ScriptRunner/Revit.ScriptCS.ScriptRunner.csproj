@@ -92,9 +92,7 @@
     <Compile Include="CodeActionsConverter.cs" />
     <Compile Include="DocumentTemplateSelector.cs" />
     <Compile Include="DocumentViewModel.cs" />
-    <Compile Include="FrmSharpShell.xaml.cs">
-      <DependentUpon>FrmSharpShell.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ImageUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -109,7 +107,7 @@
     <Compile Include="RoslynEditorViewModel.cs" />
     <Compile Include="ScriptGlobals.cs" />
     <Compile Include="ScriptRunnerApp.cs" />
-    <Compile Include="ScriptRunnerExternalCommand.cs" />
+    <Compile Include="ScriptRunnerCommand.cs" />
     <Compile Include="ScriptRunnerHandler.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
@@ -134,10 +132,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="FrmSharpShell.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

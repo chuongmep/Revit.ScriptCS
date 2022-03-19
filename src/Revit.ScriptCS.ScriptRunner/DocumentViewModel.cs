@@ -54,24 +54,21 @@ namespace Revit.ScriptCS.ScriptRunner
         public bool IsReadOnly
         {
             get { return _isReadOnly; }
-            private set { SetProperty(ref _isReadOnly, value); }
+            private set => OnPropertyChanged(ref _isReadOnly, value);
         }
 
         private TextDocument _document = null;
         public TextDocument Document
         {
             get { return _document; }
-            set { SetProperty(ref _document, value);}
+            set => OnPropertyChanged(ref _document, value);
         }
 
         private string _title = null;
         public string Title
         {
             get { return _title; }
-            set
-            {
-                SetProperty(ref _title, value);
-            }
+            set => OnPropertyChanged(ref _title, value);
         }
 
         private bool _isDirty = false;
@@ -97,10 +94,7 @@ namespace Revit.ScriptCS.ScriptRunner
             {
                 return _isReadOnlyReason;
             }
-            protected set
-            {
-                SetProperty(ref _isReadOnlyReason, value);
-            }
+            protected set => OnPropertyChanged(ref _isReadOnlyReason, value);
         }
         private string _filePath = null;
         public string FilePath
@@ -159,20 +153,14 @@ namespace Revit.ScriptCS.ScriptRunner
         public string ContentId
         {
             get { return _contentId; }
-            set
-            {
-                SetProperty(ref _contentId, value);
-            }
+            set => OnPropertyChanged(ref _contentId, value);
         }
 
         private bool _isActive = false;
         public bool IsActive
         {
             get { return _isActive; }
-            set
-            {
-                SetProperty(ref _isActive, value);
-            }
+            set => OnPropertyChanged(ref _isActive, value);
         }
 
         private bool _isSelected = false;
@@ -181,7 +169,7 @@ namespace Revit.ScriptCS.ScriptRunner
             get { return _isSelected; }
             set
             {
-                SetProperty(ref _isSelected, value);
+                OnPropertyChanged(ref _isSelected, value);
             }
         }
         public string Text { get; set; }

@@ -28,13 +28,13 @@ namespace Revit.ScriptCS.ScriptRunner
         public string Result
         {
             get { return _result; }
-            set { SetProperty(ref _result, value); }
+            set { OnPropertyChanged(ref _result, value); }
         }
 
         public Visibility IsRunning
         {
             get { return _isRunning; }
-            set { SetProperty(ref _isRunning, value); }
+            set { OnPropertyChanged(ref _isRunning, value); }
         }
 
         ObservableCollection<DocumentViewModel> _documents = new ObservableCollection<DocumentViewModel>();

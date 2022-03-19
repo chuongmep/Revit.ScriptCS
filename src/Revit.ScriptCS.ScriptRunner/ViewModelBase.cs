@@ -12,7 +12,7 @@ namespace Revit.ScriptCS.ScriptRunner
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected bool OnPropertyChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if ( !EqualityComparer<T>.Default.Equals(field, value) )
             {
