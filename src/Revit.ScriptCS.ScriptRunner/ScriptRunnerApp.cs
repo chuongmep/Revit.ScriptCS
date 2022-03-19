@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Autodesk.AutoCAD.Runtime;
+using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 using Exception = System.Exception;
 
 namespace Revit.ScriptCS.ScriptRunner
@@ -21,6 +22,8 @@ namespace Revit.ScriptCS.ScriptRunner
             ResolveAssembly();
             //ScriptRunnerExternalCommand command = new ScriptRunnerExternalCommand();
             //command.ShowFormWPF();
+            Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("Sharp Shell Loaded...");
+
         }
 
         public void Terminate()
@@ -33,11 +36,13 @@ namespace Revit.ScriptCS.ScriptRunner
             try
             {
                 string filePath = Assembly.GetExecutingAssembly().Location;
-                var files = Directory.GetFiles(filePath);
+                string directoryName = Path.GetDirectoryName(filePath);
+                var files = Directory.GetFiles(directoryName);
                 foreach (string file in files)
                 {
                     if (file.EndsWith(".dll"))
                     {
+                        WriteConsole($"Loading....{file}");
                         Assembly.LoadFrom(file);
                     }
                 }
@@ -46,6 +51,11 @@ namespace Revit.ScriptCS.ScriptRunner
             {
                 MessageBox.Show(e.ToString());
             }
+        }
+
+        void WriteConsole(string message)
+        {
+            Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(message);
         }
     }
 }
